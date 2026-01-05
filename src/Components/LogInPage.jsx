@@ -12,10 +12,21 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    localStorage.setItem("loginEmail", email);
-    localStorage.setItem("loginPassword", password);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
 
-    setShowPopup(true);
+    if (!storedUser) {
+      alert("No account found. Please sign up first.");
+      return;
+    }
+
+    if (
+      email === storedUser.email &&
+      password === storedUser.password
+    ) {
+      setShowPopup(true);
+    } else {
+      alert("Invalid email or password");
+    }
   };
 
   const handlePopupClose = () => {
@@ -35,7 +46,7 @@ const Login = () => {
       <div className="min-h-screen flex justify-center bg-white px-4">
         <div className="w-full max-w-sm min-h-screen flex flex-col">
 
-          <div className="pt-8 pb-2">
+          <div className="pt-8 pb-4">
             <h1 className="text-2xl font-semibold text-gray-900 mb-2">
               Signin to your <br /> PopX account
             </h1>
@@ -61,7 +72,7 @@ const Login = () => {
             </form>
           </div>
 
-          <div className="mt-6 sticky bottom-0 bg-white pb-4">
+          <div className="mt-auto pb-6">
             <button
               onClick={handleLogin}
               className="w-full bg-purple-600 text-white py-3 rounded-md font-medium hover:bg-purple-700"
